@@ -6,10 +6,27 @@ import time
 
 # Import the ADS1x15 module.
 import Adafruit_ADS1x15
-
+from collections import deque
 
 # Create an ADS1115 ADC (16-bit) instance.
-adc = Adafruit_ADS1x15.ADS1115()
+#adc = Adafruit_ADS1x15.ADS1115()
+
+# Log data the last maxlen seconds
+Log = deque('',maxlen=60)
+Value0 = 30600
+Value90 = 25100
+ValueDecreaseAngle = (Value0-Value90)/90
+
+def LogData(value):
+    # Append the value in a list storing the last 60 values
+    Log.appendleft(value)
+
+def ValueToAngle(value):
+    # Calculate the angle from the sensor
+    Angle = round(abs(value-Value0)/ValueDecreaseAngle,0)
+    return Angle
+
+
 
 # Or create an ADS1015 ADC (12-bit) instance.
 #adc = Adafruit_ADS1x15.ADS1015()
@@ -31,23 +48,19 @@ GAIN = 1
 
 print('Reading ADS1x15 values, press Ctrl-C to quit...')
 # Print nice channel column headers.
-print('| {0:>6} | {1:>6} | {2:>6} | {3:>6} |'.format(*range(4)))
+#print('| {0:>6} | {1:>6} | {2:>6} | {3:>6} |'.format(*range(1)))
 print('-' * 37)
 # Main loop.
-while True:
+
+
+
+while True
     # Read all the ADC channel values in a list.
-    values = [0]*4
-    for i in range(4):
-        # Read the specified ADC channel using the previously set gain value.
-        values[i] = adc.read_adc(i, gain=GAIN)
-        # Note you can also pass in an optional data_rate parameter that controls
-        # the ADC conversion time (in samples/second). Each chip has a different
-        # set of allowed data rate values, see datasheet Table 9 config register
-        # DR bit values.
-        #values[i] = adc.read_adc(i, gain=GAIN, data_rate=128)
-        # Each value will be a 12 or 16 bit signed integer value depending on the
-        # ADC (ADS1015 = 12-bit, ADS1115 = 16-bit).
-    # Print the ADC values.
-    print('| {0:>6} | {1:>6} | {2:>6} | {3:>6} |'.format(*values))
-    # Pause for half a second.
-    time.sleep(0.5)
+     value = adc.read_adc(1, gain=GAIN, data_rate=128)
+    # print('| {0:>6} | {1:>6} | {2:>6} | {3:>6} |'.format(*value))
+    # Pause for a second.
+    angle = ValueToAngle(value)
+    LogData(angle)
+    print(angle)#
+
+    time.sleep(1)
