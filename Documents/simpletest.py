@@ -54,9 +54,9 @@ print('-' * 37)
 
 
 
-while True
+while True:
     # Read all the ADC channel values in a list.
-     value = adc.read_adc(1, gain=GAIN, data_rate=128)
+    value = adc.read_adc(1, gain=GAIN, data_rate=128)
     # print('| {0:>6} | {1:>6} | {2:>6} | {3:>6} |'.format(*value))
     # Pause for a second.
     angle = ValueToAngle(value)
