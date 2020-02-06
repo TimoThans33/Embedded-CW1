@@ -9,13 +9,15 @@ import Adafruit_ADS1x15
 from collections import deque
 
 # Create an ADS1115 ADC (16-bit) instance.
-#adc = Adafruit_ADS1x15.ADS1115()
+adc = Adafruit_ADS1x15.ADS1115()
 
 # Log data the last maxlen seconds
 Log = deque('',maxlen=60)
-Value0 = 30600
-Value90 = 25100
-ValueDecreaseAngle = (Value0-Value90)/90
+ResistanceStraight = 37300
+ResistanceBend = 90000
+VDD = 5
+RDiv = 47000
+
 
 def LogData(value):
     # Append the value in a list storing the last 60 values
@@ -23,9 +25,12 @@ def LogData(value):
 
 def ValueToAngle(value):
     # Calculate the angle from the sensor
-    Angle = round(abs(value-Value0)/ValueDecreaseAngle,0)
-    return Angle
-
+    flexV = value*VDD/1023
+    print(flexV)
+    flexR = RDiv*(VDD/flexV-1)
+   # angle = map(flexR, ResistanceStraight, ResistanceBend, 0, 90)
+   # return Angle
+    print(flexR)
 
 
 # Or create an ADS1015 ADC (12-bit) instance.
@@ -58,9 +63,10 @@ while True:
     # Read all the ADC channel values in a list.
     value = adc.read_adc(1, gain=GAIN, data_rate=128)
     # print('| {0:>6} | {1:>6} | {2:>6} | {3:>6} |'.format(*value))
-    # Pause for a second.
+    # Pause for a second
+    print(value)
     angle = ValueToAngle(value)
-    LogData(angle)
-    print(angle)#
+  #  LogData(angle)
+   # print(angle)#
 
     time.sleep(1)
