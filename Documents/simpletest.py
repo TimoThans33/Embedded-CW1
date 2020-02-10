@@ -82,15 +82,19 @@ def GetValueFromTempSensor():
 
 
 def SetModeAccSensor():
-    id =  ReadI2C(AccAddr, WhoAmI, 1)
-    print(id)
-    print(int.from_bytes(id, "big"))
+    if  int.from_bytes(ReadI2C(AccAddr, WhoAmI, 1), "big") != AccId:
+        print("Failed to find Accelerometer")
+        exit()
+    WriteI2C(AccAddr, RegCtrlReg1, 0)
+    WriteI2C(AccAddr, RegXYZData, 0x00)
+    WriteI2C(AccAddr, RegCtrlReg2, 0x01)
+    WriteI2C(AccAddr, RegCtrlReg1, 0xA4) # 10100100
 
 
 
 #def GetValueFromAccSensor():
 
-SetModeAccSensor()    
+SetModeAccSensor()
 
 while False:
     value = GetValueFromTempSensor()
