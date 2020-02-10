@@ -2,11 +2,11 @@
 import time
 
 
-#import smbus
+import smbus
 from collections import deque
 
 # Create an instance
-#bus = smbus.SMBus(1)
+bus = smbus.SMBus(1)
 
 # Register and config values of ADS1115
 Addr = 0x48
@@ -46,15 +46,21 @@ print(hex(config))
 config |= ConfigDR
 print(hex(config))
 
-bus.write_byte(Addr, config)
-
-data = bus.read_i2c_block_data(Addr, Conversion,2)
-
-intData = int.from_bytes(data,’big’)
-
-print(intData)
+DataWrite = [(config >> 8) & 0xFF, config & 0xFF]
 
 
+while True:
+    bus.write_i2c_block_data(Addr, Config, DataWrite)
+
+    data = bus.read_i2c_block_data(Addr, Conversion,2)
+    
+    print(data)
+
+    intData = int.from_bytes(data,"big")
+	
+    print(intData)
+
+    time.sleep(1)
 
 
 
