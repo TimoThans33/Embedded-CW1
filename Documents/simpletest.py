@@ -25,8 +25,8 @@ DataRate = 32
 
 # Log data the last maxlen seconds
 Log = deque('',maxlen=60)
-ValueStraight = 31800
-ValueBend = 27000
+ValueStraight = 30550
+ValueBend = 26600
 ValuePerAngle = (ValueStraight-ValueBend)/90
 
 def LogData(value):
