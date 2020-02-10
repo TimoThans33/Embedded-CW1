@@ -84,7 +84,7 @@ def GetValueFromTempSensor():
 def SetModeAccSensor():
     id =  ReadI2C(AccAddr, WhoAmI, 1)
     print(id)
-    print(int.from_bytes(id, "big"))
+    print(AccID-id)
 
 
 
