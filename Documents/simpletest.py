@@ -39,21 +39,15 @@ def ValueToAngle(value):
 channel = 0
 config = OSConfig
 print(hex(config))
+print(((channel+0x04) & 0x07) << MuxOffset)
 config |= ((channel+0x04) & 0x07) << MuxOffset
 print(hex(config))
 config |= ModeSingle
 print(hex(config))
 config |= ConfigDR
 print(hex(config))
-
-bus.write_byte(Addr, config)
-
-data = bus.read_i2c_block_data(Addr, Conversion,2)
-
-intData = int.from_bytes(data,’big’)
-
-print(intData)
-
+print(config)
+print([(config >> 8) & 0xFF,config & 0xFF])
 
 
 
