@@ -144,7 +144,7 @@ while True:
     print(Acc)
     Angle[0] = 0.98*(Angle[0]+Gyro[0]*0.2) + (1-0.92)*AccAngle[0]
     Angle[1] = 0.98*(Angle[1]+Gyro[1]*0.2) + (1-0.92)*AccAngle[1]
-    print(Angle)
+    #print(Angle)
     time.sleep(0.2)
 
 while False:
