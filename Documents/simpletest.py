@@ -107,11 +107,9 @@ def SetModeAccSensor():
 def GetValueFromAccGyroSensor():
     buffer = ReadAccGyrobyte(OutMSB, 6)
     Acc = FormatData(buffer, True)
-    print("--------")
     buffer = ReadAccGyrobyte(MOutMSB, 6)
     Gyro = FormatData(buffer)
-    print("....----....")
-    print(Acc)
+
 
     return ([x*AccMG4G for x in Acc]),([y*MagMcro for y in Gyro])
 
@@ -130,11 +128,8 @@ def ReadAccGyrobyte(reg, length):
     buffer = bytearray(length)
     k = 0
     for i in reg:
-        print(i)
         buffer[k] =  bus.read_byte_data(AccAddr, i)
-        print(buffer[k])
         k += 1
-
     return buffer
 
 def TwosComp(val, bits):
@@ -143,19 +138,17 @@ def TwosComp(val, bits):
     return val
 
 SetModeAccSensor()
-for i in range(4):
-    GetValueFromAccGyroSensor()
-    time.sleep(0.2)
 
-while False:
+
+while True:
     Acc, Gyro = GetValueFromAccGyroSensor()
-
+    print(Acc)
     AccAngle[0] = math.atan2(Acc[1],Acc[2]+math.pi)*180/math.pi
     AccAngle[1] = math.atan2(Acc[2],Acc[0]+math.pi)*180/math.pi
     Angle[0] = 0.98*(Angle[0]+Gyro[0]*0.2) + (1-0.92)*AccAngle[0]
     Angle[1] = 0.98*(Angle[1]+Gyro[1]*0.2) + (1-0.92)*AccAngle[1]
     #print(Angle)
-    time.sleep(0.2)
+    time.sleep(0.5)
 
 while False:
     value = GetValueFromTempSensor()
