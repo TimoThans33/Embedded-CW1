@@ -100,9 +100,9 @@ def SetModeAccSensor():
 
 def GetValueFromAccSensor():
 
-    xbytes = bus.read_byte_data(AccAddr, OutXMSB)
-    ybytes = bus.read_byte_data(AccAddr, OutYMSB)
-    zbytes = bus.read_byte_data(AccAddr, OutZMSB)
+    xbytes = ReadI2C(AccAddr, OutXMSB,1)
+    ybytes = ReadI2C(AccAddr, OutYMSB,1)
+    zbytes = ReadI2C(AccAddr, OutZMSB,1)
     print(bytes)
     rawX = int.from_bytes(xbytes, "big")
     X = rawX*Gravity*AccMG2G
