@@ -106,7 +106,7 @@ def GetValueFromAccSensor():
         buffer[i] =  bus.read_byte_data(AccAddr, reg)
 
     XRaw = struct.unpack_from('>H', buffer[0:2])[0]
-    XRaw = _twos_comp(accel_raw_x >> 2, 14)
+    XRaw = _twos_comp(XRaw >> 2, 14)
     print(XRaw)
 
 def _twos_comp(val, bits):
