@@ -52,6 +52,9 @@ Gravity = 9.82
 GyroAngle = [0.0]*3
 AccAngle = [0.0]*2
 Angle = [0.0]*2
+pitch = 0.0
+roll = 0.0
+dt = 0.01
 
 def LogData(value):
     # Append the value in a list storing the last 60 values
@@ -100,7 +103,7 @@ def SetModeAccSensor():
     bus.write_byte_data(AccAddr, CtrlReg1, 0x00)
     bus.write_byte_data(AccAddr, XYZData, 0x00)
     bus.write_byte_data(AccAddr, CtrlReg2, 0x02)
-    bus.write_byte_data(AccAddr, CtrlReg1, 0x15) # 00100101
+    bus.write_byte_data(AccAddr, CtrlReg1, 0x15) # 10101
     bus.write_byte_data(AccAddr, MCtrlReg1, 0x1F)    # 00011111
 
 
@@ -111,7 +114,7 @@ def GetValueFromAccGyroSensor():
     Gyro = FormatData(buffer)
 
 
-    return ([x*AccMG4G for x in Acc]),([y*MagMcro for y in Gyro])
+    return ([x*AccMG2G for x in Acc]),([y*MagMcro for y in Gyro])
 
 
 def FormatData(buffer, convert=None):
@@ -142,12 +145,17 @@ SetModeAccSensor()
 
 while True:
     Acc, Gyro = GetValueFromAccGyroSensor()
+    pitch += Gyro[0]*dt
+    roll += Gyro[1]*dt
 
+    pitchAcc = math.atan2(Acc[1], Acc[2])*180/math.pi
+    pitch = pitch*0.98 + pitchAcc*0.02
 
+    rollAcc = math.atan2(Acc[0], Acc[2])*180/math.pi
+    roll = roll*0.98 + rollAcc*0.02
 
-    print(Acc)
-    print(Gyro)
-    time.sleep(0.5)
+    print(pitch, roll)
+    time.sleep(dt)
 
 while False:
     value = GetValueFromTempSensor()
