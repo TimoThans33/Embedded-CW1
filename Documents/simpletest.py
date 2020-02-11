@@ -118,12 +118,16 @@ def GetValueFromAccGyroSensor():
 
 def FormatData(buffer, convert=None):
     data = [0]*3
+    data2 = [0]*3
     for i in range(3):
         byte = struct.unpack_from('>H', buffer[i*2:i*2+2])[0]
         if convert == True:
             data[i] = _twos_comp(byte >> 2, 14)
         else:
             data[i] = byte
+    for i in range(3):
+        data2[i] = (buffer[i*2]<<8) & buffer[2*i+1])>>2
+    print(data2)
     return data
 
 def ReadAccGyrobyte(reg, length):
