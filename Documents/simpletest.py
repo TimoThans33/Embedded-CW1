@@ -45,7 +45,7 @@ ValueStraight = 30550
 ValueBend = 26600
 ValuePerAngle = (ValueStraight-ValueBend)/90
 
-MagMcro = 0.1
+MagMcro = 0.000001
 AccMG2G = 0.000244
 AccMG4G = 0.000488
 Gravity = 9.82
@@ -146,7 +146,7 @@ SetModeAccSensor()
 while True:
     Acc, Gyro = GetValueFromAccGyroSensor()
     pitch += Gyro[0]*dt
-    roll += Gyro[1]*dt
+    roll -= Gyro[1]*dt
 
     pitchAcc = math.atan2(Acc[1], Acc[2])*180/math.pi
     pitch = pitch*0.98 + pitchAcc*0.02
