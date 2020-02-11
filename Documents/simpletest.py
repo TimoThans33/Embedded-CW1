@@ -49,6 +49,8 @@ MagMcro = 0.1
 AccMG2G = 0.000244
 Gravity = 9.82
 GyroAngle = [0.0]*3
+AccAngle = [0.0]*2
+Angle = [0.0]*2
 
 def LogData(value):
     # Append the value in a list storing the last 60 values
@@ -137,7 +139,11 @@ SetModeAccSensor()
 while True:
     Acc, Gyro = GetValueFromAccGyroSensor()
     GyroAngle += Gyro*0.02
-    print(GyroAngle)
+    AccAngle[0] = math.atan2(Acc[1],Acc[2]+math.pi)*180/math.pi
+    AccAngle[1] = math.atan2(Acc[2],Acc[0]+math.pi)*180/math.pi
+    Angle[0] = 0.98*(Angle[0]+Gyro[0]*0.02) + (1-0.92)*AccAngle[0]
+    Angle[1] = 0.98*(Angle[1]+Gyro[1]*0.02) + (1-0.92)*AccAngle[1]
+    print(Angle)
     time.sleep(0.02)
 
 while False:
