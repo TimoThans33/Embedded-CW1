@@ -94,21 +94,20 @@ def SetModeAccSensor():
         print("Failed to find Accelerometer")
         exit()
     bus.write_byte_data(AccAddr, CtrlReg1, 0x00)
-    bus.write_byte_data(AccAddr, XYZData, 0x00)
+    bus.write_byte_data(AccAddr, XYZData, 0x01)
     bus.write_byte_data(AccAddr, CtrlReg2, 0x01)
-    bus.write_byte_data(AccAddr, CtrlReg1, 0xA5) # 10100101
+    bus.write_byte_data(AccAddr, CtrlReg1, 0x0D) # 00001101
 
 def GetValueFromAccSensor():
+    buffer = bytearray(13)
+    reg = OutXMSB
+    for i in range(6):
+        reg = reg + i
+        buffer[i] =  bus.read_i2c_block_data(AccAddr, reg)
 
-    xbytes = bus.read_byte_data(AccAddr, OutXMSB)
-    ybytes = ReadI2C(AccAddr, OutYMSB,1)
-    zbytes = ReadI2C(AccAddr, OutZMSB,1)
-    print(xbytes)
-    print(ybytes)
-    print(zbytes)
-    #rawX = int.from_bytes(xbytes, "big")
-    #X = rawX*Gravity*AccMG2G
-    #print(X)
+    print(buffer)
+
+
 
 SetModeAccSensor()
 
