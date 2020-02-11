@@ -126,7 +126,7 @@ def FormatData(buffer, convert=None):
         else:
             data[i] = byte
     for i in range(3):
-        data2[i] = (buffer[i*2]<<8) & buffer[2*i+1])>>2
+        data2[i] = ((buffer[i*2]<<8) & buffer[2*i+1])>>2
     print(data2)
     return data
 
