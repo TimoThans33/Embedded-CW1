@@ -28,11 +28,12 @@ DataRate = 32
 AccAddr = 0x1F
 AccID = 0xC7
 RegStatus = 0x00
-RegCtrlReg1 = 0x2A
-RegCtrlReg2 = 0x2B
-RegCtrlReg3 = 0x2C
-RegXYZData = 0x0E
+CtrlReg1 = 0x2A
+CtrlReg2 = 0x2B
+CtrlReg3 = 0x2C
+XYZData = 0x0E
 WhoAmI = 0x0D
+OutXMSB = 0x01
 
 
 # Log data the last maxlen seconds
@@ -85,16 +86,23 @@ def SetModeAccSensor():
     if  int.from_bytes(ReadI2C(AccAddr, WhoAmI, 1), "big") != AccID:
         print("Failed to find Accelerometer")
         exit()
-    bus.write_byte_data(AccAddr, RegCtrlReg1, 0x00)
-    bus.write_byte_data(AccAddr, RegXYZData, 0x00)
-    bus.write_byte_data(AccAddr, RegCtrlReg2, 0x01)
-    bus.write_byte_data(AccAddr, RegCtrlReg1, 0xA4) # 10100100
+    bus.write_byte_data(AccAddr, CtrlReg1, 0x00)
+    bus.write_byte_data(AccAddr, XYZData, 0x00)
+    bus.write_byte_data(AccAddr, CtrlReg2, 0x01)
+    bus.write_byte_data(AccAddr, CtrlReg1, 0xA4) # 10100100
 
 
 
-#def GetValueFromAccSensor():
+def GetValueFromAccSensor():
+    Xout = ReadI2C(AccAddr, OutXMSB, 2)
+    print(Xout)
+
 
 SetModeAccSensor()
+
+while True:
+    GetValueFromAccSensor()
+    time.sleep(1)
 
 while False:
     value = GetValueFromTempSensor()
