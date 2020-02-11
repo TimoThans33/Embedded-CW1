@@ -141,7 +141,7 @@ def TwosComp(val, bits):
 
 SetModeAccSensor()
 
-N
+N = 0
 while True:
     Acc, Gyro = GetValueFromAccGyroSensor()
     pitch += Gyro[0]*dt
@@ -162,6 +162,7 @@ while True:
         LogData(pitch, LogPitch)
         LogData(roll, LogRoll)
         print(angle, pitch, roll)
+        N = 0
 
 while False:
 
