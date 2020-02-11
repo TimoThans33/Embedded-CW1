@@ -99,18 +99,22 @@ def SetModeAccSensor():
     bus.write_byte_data(AccAddr, CtrlReg1, 0x0D) # 00001101
 
 def GetValueFromAccSensor():
-    buffer = [0]*6
+    buffer = bytearray(6)
     reg = OutXMSB
     for i in range(6):
         reg = reg + i
         buffer[i] =  bus.read_byte_data(AccAddr, reg)
 
-    x =  buffer[1] << 8
-    x |= buffer[2]
-    x = x >> 2
-    print(buffer)
-    print(x)
+    XRaw = struct.unpack_from('>H', buffer[0:2])[0]
+    XRaw = _twos_comp(accel_raw_x >> 2, 14)
+    print(XRaw)
 
+def _twos_comp(val, bits):
+    # Convert an unsigned integer in 2's compliment form of the specified bit
+    # length to its signed integer value and return it.
+    if val & (1 << (bits - 1)) != 0:
+        return val - (1 << bits)
+    return val
 
 SetModeAccSensor()
 
