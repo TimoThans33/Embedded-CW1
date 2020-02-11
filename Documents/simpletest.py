@@ -31,13 +31,12 @@ AccID = 0xC7
 RegStatus = 0x00
 CtrlReg1 = 0x2A
 CtrlReg2 = 0x2B
-CtrlReg3 = 0x2C
 XYZData = 0x0E
 WhoAmI = 0x0D
 OutXMSB = 0x01
-OutYMSB = 0x03
-OutZMSB = 0x05
-
+MCtrlReg1 = 0x5B
+MCtrlReg2 = 0x5C
+MOutXMSB = 0x33
 
 # Log data the last maxlen seconds
 Log = deque('',maxlen=60)
@@ -46,6 +45,7 @@ ValueStraight = 30550
 ValueBend = 26600
 ValuePerAngle = (ValueStraight-ValueBend)/90
 
+MagMcro = 0.1
 AccMG2G = 0.000244
 Gravity = 9.82
 
@@ -97,24 +97,31 @@ def SetModeAccSensor():
     bus.write_byte_data(AccAddr, XYZData, 0x00)
     bus.write_byte_data(AccAddr, CtrlReg2, 0x02)
     bus.write_byte_data(AccAddr, CtrlReg1, 0x25) # 00100101
+    bus.write_byte_data(AccAddr, MCtrlReg1, 0x1F)    # 00011111
 
-def GetValueFromAccSensor():
-    buffer = bytearray(6)
-    reg = OutXMSB
-    for i in range(6):
+
+def GetValueFromAccGyroSensor():
+    buffer = ReadAccGyrobyte(OutXMSB, 6)
+    Acc = FormatData(buffer, True)
+    buffer = ReadAccGyrobyte(MOutXMSB, 6)
+    Gyro = FormatData(buffer)
+
+    return ([x*AccMG2G*Gravity for x in Acc]),([y*MagMcro for y in Gyro])
+
+
+def FormatData(buffer, convert=None):
+    for i in range(len(buffer)/2):
+        data[i] = struct.unpack_from('>H', buffer[i:i+2])[0]
+        if convert == True:
+            data[i] = _twos_comp(data[i] >> 2, 14)
+    return data
+
+def ReadAccGyrobyte(reg, length):
+    buffer = bytearray(length)
+    for i in range(length):
         reg = reg + i
         buffer[i] =  bus.read_byte_data(AccAddr, reg)
-
-    XRaw = struct.unpack_from('>H', buffer[0:2])[0]
-    YRaw = struct.unpack_from('>H', buffer[2:4])[0]
-    ZRaw = struct.unpack_from('>H', buffer[4:6])[0]
-    XRaw = _twos_comp(XRaw >> 2, 14)
-    YRaw = _twos_comp(YRaw >> 2, 14)
-    ZRaw = _twos_comp(ZRaw >> 2, 14)
-    x = math.atan2(YRaw,ZRaw+math.pi)*180/math.pi
-    y = math.atan2(ZRaw,XRaw+math.pi)*180/math.pi
-
-    print(x, y)
+    return buffer
 
 def _twos_comp(val, bits):
     # Convert an unsigned integer in 2's compliment form of the specified bit
@@ -126,7 +133,8 @@ def _twos_comp(val, bits):
 SetModeAccSensor()
 
 while True:
-    GetValueFromAccSensor()
+    Acc, Gyro = GetValueFromAccGyroSensor()
+    print(Acc, Gyro)
     time.sleep(1)
 
 while False:
