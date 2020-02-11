@@ -92,11 +92,11 @@ def SetModeAccSensor():
     bus.write_byte_data(AccAddr, CtrlReg1, 0x00)
     bus.write_byte_data(AccAddr, XYZData, 0x00)
     bus.write_byte_data(AccAddr, CtrlReg2, 0x01)
-    bus.write_byte_data(AccAddr, CtrlReg1, 0xA7) # 10100111
+    bus.write_byte_data(AccAddr, CtrlReg1, 0xA5) # 10100101
 
 def GetValueFromAccSensor():
 
-    bytes = ReadI2C(AccAddr, RegStatus, 6)
+    bytes = ReadI2C(AccAddr, OutXMSB, 6)
     print(bytes)
 
 SetModeAccSensor()
