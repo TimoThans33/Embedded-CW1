@@ -47,6 +47,7 @@ ValuePerAngle = (ValueStraight-ValueBend)/90
 
 MagMcro = 0.1
 AccMG2G = 0.000244
+AccMG4G = 0.000488
 Gravity = 9.82
 GyroAngle = [0.0]*3
 AccAngle = [0.0]*2
@@ -97,7 +98,7 @@ def SetModeAccSensor():
         print("Failed to find Accelerometer")
         exit()
     bus.write_byte_data(AccAddr, CtrlReg1, 0x00)
-    bus.write_byte_data(AccAddr, XYZData, 0x00)
+    bus.write_byte_data(AccAddr, XYZData, 0x01)
     bus.write_byte_data(AccAddr, CtrlReg2, 0x02)
     bus.write_byte_data(AccAddr, CtrlReg1, 0x25) # 00100101
     bus.write_byte_data(AccAddr, MCtrlReg1, 0x1F)    # 00011111
@@ -109,7 +110,7 @@ def GetValueFromAccGyroSensor():
     buffer = ReadAccGyrobyte(MOutXMSB, 6)
     Gyro = FormatData(buffer)
 
-    return ([x*AccMG2G*Gravity for x in Acc]),([y*MagMcro for y in Gyro])
+    return ([x*AccMG4G*Gravity for x in Acc]),([y*MagMcro for y in Gyro])
 
 
 def FormatData(buffer, convert=None):
