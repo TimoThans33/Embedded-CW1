@@ -111,8 +111,8 @@ def GetValueFromAccSensor():
     XRaw = _twos_comp(XRaw >> 2, 14)
     YRaw = _twos_comp(YRaw >> 2, 14)
     ZRaw = _twos_comp(ZRaw >> 2, 14)
-    x = atan2(YRaw,ZRaw+math.pi)*180/math.pi
-    y = atan2(ZRaw,XRaw+math.pi)*180/math.pi
+    x = math.atan2(YRaw,ZRaw+math.pi)*180/math.pi
+    y = math.atan2(ZRaw,XRaw+math.pi)*180/math.pi
 
     print(x, y)
 
