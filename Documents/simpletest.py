@@ -136,8 +136,8 @@ SetModeAccSensor()
 
 while True:
     Acc, Gyro = GetValueFromAccGyroSensor()
-    GyroAngle[0] += Gyro[0]*0.02
-    print(GyroAngle[0])
+    GyroAngle += Gyro*0.02
+    print(GyroAngle)
     time.sleep(0.02)
 
 while False:
