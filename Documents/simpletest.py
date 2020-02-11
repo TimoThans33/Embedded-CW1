@@ -94,7 +94,7 @@ def SetModeAccSensor():
         print("Failed to find Accelerometer")
         exit()
     bus.write_byte_data(AccAddr, CtrlReg1, 0x00)
-    bus.write_byte_data(AccAddr, XYZData, 0x01)
+    bus.write_byte_data(AccAddr, XYZData, 0x00)
     bus.write_byte_data(AccAddr, CtrlReg2, 0x01)
     bus.write_byte_data(AccAddr, CtrlReg1, 0x0D) # 00001101
 
@@ -111,7 +111,11 @@ def GetValueFromAccSensor():
     XRaw = _twos_comp(XRaw >> 2, 14)
     YRaw = _twos_comp(YRaw >> 2, 14)
     ZRaw = _twos_comp(ZRaw >> 2, 14)
-    print(XRaw, YRaw, ZRaw)
+    x = XRaw*AccMG2G*Gravity
+    y = YRaw*AccMG2G*Gravity
+    z = ZRaw*AccMG2G*Gravity
+
+    print(x, y, z)
 
 def _twos_comp(val, bits):
     # Convert an unsigned integer in 2's compliment form of the specified bit
