@@ -10,7 +10,7 @@ from collections import deque
 bus = smbus.SMBus(1)
 
 # Register and config values of ADS1115
-TempAddr = 0x48
+FlexAddr = 0x48
 Conversion = 0x00
 Config = 0x01
 LowThreshold = 0x02
@@ -39,7 +39,9 @@ MCtrlReg2 = 0x5C
 MOutMSB = [0x33, 0x34, 0x35, 0x36, 0x37, 0x38]
 
 # Log data the last maxlen seconds
-Log = deque('',maxlen=60)
+LogFlex = deque('',maxlen=60)
+LogPitch = deque('',maxlen=60)
+LogRoll = deque('',maxlen=60)
 
 ValueStraight = 30550
 ValueBend = 26600
@@ -49,16 +51,13 @@ MagMcro = 0.000001
 AccMG2G = 0.000244
 AccMG4G = 0.000488
 Gravity = 9.82
-GyroAngle = [0.0]*3
-AccAngle = [0.0]*2
-Angle = [0.0]*2
 pitch = 0.0
 roll = 0.0
 dt = 0.01
 
-def LogData(value):
+def LogData(value, log):
     # Append the value in a list storing the last 60 values
-    Log.appendleft(value)
+    log.appendleft(value)
 
 def ValueToAngle(value):
     # Calculate the angle from the sensor
@@ -72,7 +71,7 @@ def ReadI2C(Addr, Reg, Len):
     # Read byte from reg
     return bus.read_i2c_block_data(Addr, Reg, Len)
 
-def GetValueFromTempSensor():
+def GetValueFromFlexSensor():
     # Get the value of the sensor
     # data size 15 byte
     # Set OS
@@ -87,11 +86,11 @@ def GetValueFromTempSensor():
     data |= ConfigDR
     # Disable Comparator
     data |= CompDisable
-    WriteI2C(TempAddr, Config, [(data >> 8) & 0xFF, data & 0xFF])
+    WriteI2C(FlexAddr, Config, [(data >> 8) & 0xFF, data & 0xFF])
     # Wait for the data
     time.sleep(1/DataRate+0.0001)
 
-    bytes = ReadI2C(TempAddr, Conversion, 2)
+    bytes = ReadI2C(FlexAddr, Conversion, 2)
 
     return int.from_bytes(bytes, "big")
 
@@ -142,7 +141,7 @@ def TwosComp(val, bits):
 
 SetModeAccSensor()
 
-
+N
 while True:
     Acc, Gyro = GetValueFromAccGyroSensor()
     pitch += Gyro[0]*dt
@@ -154,13 +153,17 @@ while True:
     rollAcc = math.atan2(Acc[0], Acc[2])*180/math.pi
     roll = roll*0.98 + rollAcc*0.02
 
-    print(pitch, roll)
     time.sleep(dt)
+    N += 1
+    if N == 100:
+        value = GetValueFromFlexSensor()
+        angle = ValueToAngle(value)
+        LogData(angle, LogFlex)
+        LogData(pitch, LogPitch)
+        LogData(roll, LogRoll)
+        print(angle, pitch, roll)
 
 while False:
-    value = GetValueFromTempSensor()
-    angle = ValueToAngle(value)
-    LogData(angle)
-    print(LogData)
+
 
     time.sleep(1)
