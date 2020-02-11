@@ -163,8 +163,3 @@ while True:
         LogData(roll, LogRoll)
         print(angle, pitch, roll)
         N = 0
-
-while False:
-
-
-    time.sleep(1)
