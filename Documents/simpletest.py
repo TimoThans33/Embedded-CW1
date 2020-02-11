@@ -104,7 +104,9 @@ def GetValueFromAccSensor():
         reg = reg + i
         bytes =  bus.read_byte_data(AccAddr, reg)
         buffer[i] = int.from_bytes(bytes, "big")
-    x =  (buffer[1] << 8 |= buffer[2]) >>2
+    x =  buffer[1] << 8
+    x |= buffer[2]
+    x = x >> 2
     print(buffer)
     print(x)
 
