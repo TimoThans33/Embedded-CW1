@@ -106,7 +106,6 @@ def SetModeAccSensor():
 
 def GetValueFromAccGyroSensor():
     buffer = ReadAccGyrobyte(OutXMSB, 6)
-    print(buffer)
     Acc = FormatData(buffer, True)
     print("--------")
     buffer = ReadAccGyrobyte(MOutXMSB, 6)
@@ -121,10 +120,8 @@ def FormatData(buffer, convert=None):
     data = [0]*3
     for i in range(3):
         byte = struct.unpack_from('>H', buffer[i*2:i*2+2])[0]
-        print(byte)
         if convert == True:
             data[i] = TwosComp(byte >> 2, 14)
-            print(data[i])
         else:
             data[i] = byte
     return data
@@ -133,7 +130,9 @@ def ReadAccGyrobyte(reg, length):
     buffer = bytearray(length)
     for i in range(length):
         reg = reg + i
+        print(reg)
         buffer[i] =  bus.read_byte_data(AccAddr, reg)
+        print(buffer[i])
 
     return buffer
 
@@ -143,7 +142,7 @@ def TwosComp(val, bits):
     return val
 
 SetModeAccSensor()
-for i in range(10):
+for i in range(4):
     GetValueFromAccGyroSensor()
     time.sleep(0.2)
 
