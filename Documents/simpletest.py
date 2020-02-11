@@ -95,8 +95,8 @@ def SetModeAccSensor():
         exit()
     bus.write_byte_data(AccAddr, CtrlReg1, 0x00)
     bus.write_byte_data(AccAddr, XYZData, 0x00)
-    bus.write_byte_data(AccAddr, CtrlReg2, 0x01)
-    bus.write_byte_data(AccAddr, CtrlReg1, 0x0D) # 00001101
+    bus.write_byte_data(AccAddr, CtrlReg2, 0x02)
+    bus.write_byte_data(AccAddr, CtrlReg1, 0x25) # 00100101
 
 def GetValueFromAccSensor():
     buffer = bytearray(6)
