@@ -103,8 +103,8 @@ def GetValueFromAccSensor():
     reg = OutXMSB
     for i in range(6):
         reg = reg + i
-        x =  bus.read_i2c_block_data(AccAddr, reg)
-        print(len(x))
+        x =  bus.read_i2c_block_data(AccAddr, reg,1)
+        print(x)
     #print(buffer)
 
 
