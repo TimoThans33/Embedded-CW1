@@ -106,8 +106,12 @@ def GetValueFromAccSensor():
         buffer[i] =  bus.read_byte_data(AccAddr, reg)
 
     XRaw = struct.unpack_from('>H', buffer[0:2])[0]
+    YRaw = struct.unpack_from('>H', buffer[2:4])[0]
+    ZRaw = struct.unpack_from('>H', buffer[4:6])[0]
     XRaw = _twos_comp(XRaw >> 2, 14)
-    print(XRaw)
+    YRaw = _twos_comp(YRaw >> 2, 14)
+    ZRaw = _twos_comp(ZRaw >> 2, 14)
+    print(XRaw, YRaw, ZRaw)
 
 def _twos_comp(val, bits):
     # Convert an unsigned integer in 2's compliment form of the specified bit
