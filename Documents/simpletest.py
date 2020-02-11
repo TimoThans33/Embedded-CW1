@@ -104,7 +104,7 @@ def GetValueFromAccSensor():
     for i in range(6):
         reg = reg + i
         x =  bus.read_i2c_block_data(AccAddr, reg)
-        print(x)
+        print(len(x))
     #print(buffer)
 
 
