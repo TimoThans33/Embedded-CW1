@@ -138,13 +138,14 @@ SetModeAccSensor()
 
 while True:
     Acc, Gyro = GetValueFromAccGyroSensor()
-    
+
     AccAngle[0] = math.atan2(Acc[1],Acc[2]+math.pi)*180/math.pi
     AccAngle[1] = math.atan2(Acc[2],Acc[0]+math.pi)*180/math.pi
-    Angle[0] = 0.98*(Angle[0]+Gyro[0]*0.02) + (1-0.92)*AccAngle[0]
-    Angle[1] = 0.98*(Angle[1]+Gyro[1]*0.02) + (1-0.92)*AccAngle[1]
+    print(Acc)
+    Angle[0] = 0.98*(Angle[0]+Gyro[0]*0.2) + (1-0.92)*AccAngle[0]
+    Angle[1] = 0.98*(Angle[1]+Gyro[1]*0.2) + (1-0.92)*AccAngle[1]
     print(Angle)
-    time.sleep(0.02)
+    time.sleep(0.2)
 
 while False:
     value = GetValueFromTempSensor()
