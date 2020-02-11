@@ -95,9 +95,10 @@ def SetModeAccSensor():
     bus.write_byte_data(AccAddr, CtrlReg1, 0xA5) # 10100101
 
 def GetValueFromAccSensor():
-
+    bytes = bytearray(6)
     bytes = ReadI2C(AccAddr, OutXMSB, 6)
     print(bytes)
+    X = struct.unpack_from(">H", bytes[0:2])[0]
 
 SetModeAccSensor()
 
