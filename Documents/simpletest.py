@@ -130,7 +130,8 @@ def ReadAccGyrobyte(reg, length):
     for i in range(length):
         reg = reg + i
         buffer[i] =  bus.read_byte_data(AccAddr, reg)
-        print(buffer[i])
+
+    print(buffer)
     return buffer
 
 def _twos_comp(val, bits):
@@ -139,8 +140,10 @@ def _twos_comp(val, bits):
     return val
 
 SetModeAccSensor()
+GetValueFromAccGyroSensor()
 
-while True:
+
+while False:
     Acc, Gyro = GetValueFromAccGyroSensor()
 
     AccAngle[0] = math.atan2(Acc[1],Acc[2]+math.pi)*180/math.pi
