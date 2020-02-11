@@ -102,7 +102,7 @@ def GetValueFromAccSensor():
 
     bytes = ReadI2C(AccAddr, OutXMSB, 6)
     print(bytes)
-    rawX = int.from_bytes(bytes[0:2], "big")
+    rawX = int.from_bytes(bytes[0:1], "big")
     X = rawX*Gravity*AccMG2G
     print(X)
 
