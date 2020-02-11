@@ -99,7 +99,8 @@ def GetValueFromAccSensor():
     bytes = ReadI2C(AccAddr, OutXMSB, 6)
     print(bytes)
     X = struct.unpack_from(">H", bytes[0:2])[0]
-
+    print(X)
+    
 SetModeAccSensor()
 
 while True:
