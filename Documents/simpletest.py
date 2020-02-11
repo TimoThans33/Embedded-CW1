@@ -99,14 +99,14 @@ def SetModeAccSensor():
     bus.write_byte_data(AccAddr, CtrlReg1, 0x0D) # 00001101
 
 def GetValueFromAccSensor():
-    buffer = bytearray(13)
     reg = OutXMSB
     for i in range(6):
         reg = reg + i
-        buffer[i] =  bus.read_byte_data(AccAddr, reg)
-
+        bytes =  bus.read_byte_data(AccAddr, reg)
+        buffer[i] = int.from_bytes(bytes, "big")
+    x =  (buffer[1] << 8 |= buffer[2]) >>2
     print(buffer)
-
+    print(x)
 
 
 SetModeAccSensor()
