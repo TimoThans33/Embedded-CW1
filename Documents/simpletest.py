@@ -41,9 +41,13 @@ OutZMSB = 0x05
 
 # Log data the last maxlen seconds
 Log = deque('',maxlen=60)
+
 ValueStraight = 30550
 ValueBend = 26600
 ValuePerAngle = (ValueStraight-ValueBend)/90
+
+AccMG2G = 0.000244
+Gravity = 9.82
 
 def LogData(value):
     # Append the value in a list storing the last 60 values
@@ -98,7 +102,8 @@ def GetValueFromAccSensor():
 
     bytes = ReadI2C(AccAddr, OutXMSB, 6)
     print(bytes)
-    X = int.from_bytes(bytes[0:2], "big")
+    rawX = int.from_bytes(bytes[0:2], "big")
+    X = rawX*Gravity*AccMG2G
     print(X)
 
 SetModeAccSensor()
