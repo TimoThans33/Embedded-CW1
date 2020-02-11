@@ -110,7 +110,7 @@ def GetValueFromAccGyroSensor():
     buffer = ReadAccGyrobyte(MOutXMSB, 6)
     Gyro = FormatData(buffer)
 
-    return ([x*AccMG4G*Gravity for x in Acc]),([y*MagMcro for y in Gyro])
+    return ([x*AccMG4G for x in Acc]),([y*MagMcro for y in Gyro])
 
 
 def FormatData(buffer, convert=None):
