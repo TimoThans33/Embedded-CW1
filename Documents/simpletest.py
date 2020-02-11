@@ -128,6 +128,7 @@ def ReadAccGyrobyte(reg, length):
     for i in range(length):
         reg = reg + i
         buffer[i] =  bus.read_byte_data(AccAddr, reg)
+        print(buffer[i])
     return buffer
 
 def _twos_comp(val, bits):
