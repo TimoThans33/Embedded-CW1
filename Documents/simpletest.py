@@ -104,6 +104,8 @@ def GetValueFromAccSensor():
     ybytes = ReadI2C(AccAddr, OutYMSB,1)
     zbytes = ReadI2C(AccAddr, OutZMSB,1)
     print(xbytes)
+    print(ybytes)
+    print(zbytes)
     #rawX = int.from_bytes(xbytes, "big")
     #X = rawX*Gravity*AccMG2G
     #print(X)
