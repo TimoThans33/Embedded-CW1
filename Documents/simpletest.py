@@ -95,6 +95,7 @@ def SetModeAccSensor():
 
 def GetValueFromAccSensor():
     Xout = ReadI2C(AccAddr, OutXMSB, 2)
+    Xout = int.from_bytes(Xout, "big")
     print(Xout)
 
 
