@@ -122,7 +122,6 @@ def FormatData(buffer, convert=None):
     for i in range(3):
         byte = struct.unpack_from('>H', buffer[i*2:i*2+2])[0]
         if convert == True:
-            print("True")
             data[i] = _twos_comp(byte >> 2, 14)
         else:
             data[i] = byte
@@ -130,6 +129,7 @@ def FormatData(buffer, convert=None):
         data2[i] = (buffer[i*2]<<8)
         data2[i] |= buffer[2*i+1]
         data2[i] >>2 
+    print(data)
     print(data2)
     return data
 
@@ -139,7 +139,6 @@ def ReadAccGyrobyte(reg, length):
         reg = reg + i
         buffer[i] =  bus.read_byte_data(AccAddr, reg)
 
-    print(buffer)
     return buffer
 
 def _twos_comp(val, bits):
