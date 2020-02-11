@@ -124,7 +124,7 @@ def FormatData(buffer, convert=None):
             data[i] = TwosComp(byte >> 2, 14)
         else:
             data[i] = byte
-    rawx = struct.unpack_from('>Q', buffer[2:4])[0]
+    rawx = struct.unpack_from('>h', buffer[2:4])[0]
     x = TwosComp(rawx >> 2, 14)
     print(data)
     print(x)
