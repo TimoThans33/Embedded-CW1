@@ -117,6 +117,7 @@ def FormatData(buffer, convert=None):
     data = [0]*3
     for i in range(3):
         byte = struct.unpack_from('>H', buffer[i*2:i*2+2])[0]
+        print(byte)
         if convert == True:
             data[i] = _twos_comp(byte >> 2, 14)
         else:
