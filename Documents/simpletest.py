@@ -107,8 +107,10 @@ def SetModeAccSensor():
 def GetValueFromAccGyroSensor():
     buffer = ReadAccGyrobyte(OutXMSB, 6)
     Acc = FormatData(buffer, True)
+    print("--------")
     buffer = ReadAccGyrobyte(MOutXMSB, 6)
     Gyro = FormatData(buffer)
+    print("....----....")
 
     return ([x*AccMG4G for x in Acc]),([y*MagMcro for y in Gyro])
 
@@ -132,8 +134,6 @@ def ReadAccGyrobyte(reg, length):
     return buffer
 
 def _twos_comp(val, bits):
-    # Convert an unsigned integer in 2's compliment form of the specified bit
-    # length to its signed integer value and return it.
     if val & (1 << (bits - 1)) != 0:
         return val - (1 << bits)
     return val
@@ -145,7 +145,6 @@ while True:
 
     AccAngle[0] = math.atan2(Acc[1],Acc[2]+math.pi)*180/math.pi
     AccAngle[1] = math.atan2(Acc[2],Acc[0]+math.pi)*180/math.pi
-    print(Acc)
     Angle[0] = 0.98*(Angle[0]+Gyro[0]*0.2) + (1-0.92)*AccAngle[0]
     Angle[1] = 0.98*(Angle[1]+Gyro[1]*0.2) + (1-0.92)*AccAngle[1]
     #print(Angle)
