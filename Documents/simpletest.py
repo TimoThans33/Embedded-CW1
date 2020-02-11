@@ -99,6 +99,7 @@ def SetModeAccSensor():
     bus.write_byte_data(AccAddr, CtrlReg1, 0x0D) # 00001101
 
 def GetValueFromAccSensor():
+    buffer = [0]*6
     reg = OutXMSB
     for i in range(6):
         reg = reg + i
