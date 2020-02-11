@@ -3,6 +3,7 @@ import time
 
 
 import smbus
+import struct
 from collections import deque
 
 # Create an instance
@@ -34,6 +35,8 @@ CtrlReg3 = 0x2C
 XYZData = 0x0E
 WhoAmI = 0x0D
 OutXMSB = 0x01
+OutYMSB = 0x03
+OutZMSB = 0x05
 
 
 # Log data the last maxlen seconds
@@ -89,14 +92,16 @@ def SetModeAccSensor():
     bus.write_byte_data(AccAddr, CtrlReg1, 0x00)
     bus.write_byte_data(AccAddr, XYZData, 0x00)
     bus.write_byte_data(AccAddr, CtrlReg2, 0x01)
-    bus.write_byte_data(AccAddr, CtrlReg1, 0xA4) # 10100100
+    bus.write_byte_data(AccAddr, CtrlReg1, 0xA6) # 10100110
 
 
 
 def GetValueFromAccSensor():
-    Xout = ReadI2C(AccAddr, OutXMSB, 2)
-    Xout = int.from_bytes(Xout, "big")
-    print(Xout)
+    Buffer = bytearray(6)
+    Buffer[0:2] = ReadI2C(AccAddr, OutXMSB, 2)
+    X = struct.unpack_from('>H', Buffer[0:2])[0]
+    print(Buffer)
+    print(X)
 
 
 SetModeAccSensor()
