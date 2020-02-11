@@ -1,7 +1,7 @@
 
 import time
 
-
+import math
 import smbus
 import struct
 from collections import deque
@@ -111,11 +111,10 @@ def GetValueFromAccSensor():
     XRaw = _twos_comp(XRaw >> 2, 14)
     YRaw = _twos_comp(YRaw >> 2, 14)
     ZRaw = _twos_comp(ZRaw >> 2, 14)
-    x = XRaw*AccMG2G*Gravity
-    y = YRaw*AccMG2G*Gravity
-    z = ZRaw*AccMG2G*Gravity
+    x = atan2(YRaw,ZRaw+math.pi)*180/math.pi
+    y = atan2(ZRaw,XRaw+math.pi)*180/math.pi
 
-    print(x, y, z)
+    print(x, y)
 
 def _twos_comp(val, bits):
     # Convert an unsigned integer in 2's compliment form of the specified bit
