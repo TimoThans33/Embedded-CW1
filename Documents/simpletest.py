@@ -99,12 +99,12 @@ def SetModeAccSensor():
     bus.write_byte_data(AccAddr, CtrlReg1, 0xA5) # 10100101
 
 def GetValueFromAccSensor():
-    
-    bytes[0] = bus.read_byte_data(AccAddr, OutXMSB)
-    bytes[1] = bus.read_byte_data(AccAddr, OutYMSB)
-    bytes[2] = bus.read_byte_data(AccAddr, OutZMSB)
+
+    xbytes = bus.read_byte_data(AccAddr, OutXMSB)
+    ybytes = bus.read_byte_data(AccAddr, OutYMSB)
+    zbytes = bus.read_byte_data(AccAddr, OutZMSB)
     print(bytes)
-    rawX = int.from_bytes(bytes[0], "big")
+    rawX = int.from_bytes(xbytes, "big")
     X = rawX*Gravity*AccMG2G
     print(X)
 
