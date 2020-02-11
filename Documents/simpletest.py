@@ -141,8 +141,9 @@ def _twos_comp(val, bits):
     return val
 
 SetModeAccSensor()
-GetValueFromAccGyroSensor()
-
+for i in range(10):
+    GetValueFromAccGyroSensor()
+    time.sleep(0.2)
 
 while False:
     Acc, Gyro = GetValueFromAccGyroSensor()
