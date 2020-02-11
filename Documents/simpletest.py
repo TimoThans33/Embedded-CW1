@@ -33,10 +33,10 @@ CtrlReg1 = 0x2A
 CtrlReg2 = 0x2B
 XYZData = 0x0E
 WhoAmI = 0x0D
-OutXMSB = 0x01
+OutMSB = [0x01 0x02 0x03 0x04 0x05 0x06]
 MCtrlReg1 = 0x5B
 MCtrlReg2 = 0x5C
-MOutXMSB = 0x33
+MOutMSB = [0x33 0x34 0x35 0x36 0x37 0x38]
 
 # Log data the last maxlen seconds
 Log = deque('',maxlen=60)
@@ -105,10 +105,10 @@ def SetModeAccSensor():
 
 
 def GetValueFromAccGyroSensor():
-    buffer = ReadAccGyrobyte(OutXMSB, 6)
+    buffer = ReadAccGyrobyte(OutMSB, 6)
     Acc = FormatData(buffer, True)
     print("--------")
-    buffer = ReadAccGyrobyte(MOutXMSB, 6)
+    buffer = ReadAccGyrobyte(MOutMSB, 6)
     Gyro = FormatData(buffer)
     print("....----....")
     print(Acc)
@@ -128,11 +128,12 @@ def FormatData(buffer, convert=None):
 
 def ReadAccGyrobyte(reg, length):
     buffer = bytearray(length)
-    for i in range(length):
-        reg = reg + i
-        print(reg)
-        buffer[i] =  bus.read_byte_data(AccAddr, reg)
-        print(buffer[i])
+    k = 0
+    for i in reg:
+        print(i)
+        buffer[k] =  bus.read_byte_data(AccAddr, i)
+        print(buffer[k])
+        k += 1
 
     return buffer
 
