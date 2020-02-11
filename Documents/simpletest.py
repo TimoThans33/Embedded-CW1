@@ -110,6 +110,7 @@ def GetValueFromAccGyroSensor():
 
 
 def FormatData(buffer, convert=None):
+    data = [0]*3
     for i in range(3):
         data[i] = struct.unpack_from('>H', buffer[i:i+2])[0]
         if convert == True:
