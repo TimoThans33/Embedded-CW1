@@ -98,9 +98,9 @@ def SetModeAccSensor():
         print("Failed to find Accelerometer")
         exit()
     bus.write_byte_data(AccAddr, CtrlReg1, 0x00)
-    bus.write_byte_data(AccAddr, XYZData, 0x01)
+    bus.write_byte_data(AccAddr, XYZData, 0x00)
     bus.write_byte_data(AccAddr, CtrlReg2, 0x02)
-    bus.write_byte_data(AccAddr, CtrlReg1, 0x25) # 00100101
+    bus.write_byte_data(AccAddr, CtrlReg1, 0x15) # 00100101
     bus.write_byte_data(AccAddr, MCtrlReg1, 0x1F)    # 00011111
 
 
