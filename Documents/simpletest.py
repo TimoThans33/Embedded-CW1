@@ -103,9 +103,9 @@ def GetValueFromAccSensor():
     reg = OutXMSB
     for i in range(6):
         reg = reg + i
-        x =  bus.read_byte_data(AccAddr, reg)
-        print(x)
-    #print(buffer)
+        buffer[i] =  bus.read_byte_data(AccAddr, reg)
+
+    print(buffer)
 
 
 
