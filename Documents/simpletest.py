@@ -155,7 +155,7 @@ def CalcAngle(Acc, Gyro):
 
     rollAcc = math.atan2(Acc[0], Acc[2])*180/math.pi
     roll = roll*0.98 + rollAcc*0.02
-    return = pitch, roll
+    return  pitch, roll
 
 
 SetModeAccSensor()
