@@ -1,6 +1,5 @@
 
 import time
-
 import math
 import smbus
 import struct
@@ -8,6 +7,8 @@ from collections import deque
 
 # Create an instance
 bus = smbus.SMBus(1)
+
+StartTime = time.time()
 
 # Register and config values of ADS1115
 FlexAddr = 0x48
@@ -24,7 +25,7 @@ Gain = 0x0200
 CompDisable = 0x0003
 DataRate = 32
 
-# Accelerometer
+# Register and config values of FXOS8700
 
 AccAddr = 0x1F
 AccID = 0xC7
@@ -53,6 +54,7 @@ Gravity = 9.82
 pitch = 0.0
 roll = 0.0
 dt = 0.01
+N = 0
 
 def LogData(value, log):
     # Append the value in a list storing the last 60 values
@@ -102,18 +104,21 @@ def SetModeAccSensor():
     bus.write_byte_data(AccAddr, CtrlReg1, 0x00)
     # 2g Full-scale range
     bus.write_byte_data(AccAddr, XYZData, 0x00)
-    #
+    # High Resolution
     bus.write_byte_data(AccAddr, CtrlReg2, 0x02)
-    bus.write_byte_data(AccAddr, CtrlReg1, 0x15) # 10101
+    # 50Hz, ODR 100hZ, Redused Noise, Normal, Active
+    bus.write_byte_data(AccAddr, CtrlReg1, 0x15)     # 00010101
+    # Auto Dis, No Mag, No Action, hybrid
     bus.write_byte_data(AccAddr, MCtrlReg1, 0x1F)    # 00011111
 
 
 def GetValueFromAccGyroSensor():
+    # Read Accelerometer Sensor
     buffer = ReadAccGyrobyte(OutMSB, 6)
     Acc = FormatData(buffer, True)
+    # Read Gyrometer Sensor
     buffer = ReadAccGyrobyte(MOutMSB, 6)
     Gyro = FormatData(buffer)
-
 
     return ([x*AccMG2G for x in Acc]),([y*MagMcro for y in Gyro])
 
@@ -143,8 +148,9 @@ def TwosComp(val, bits):
 
 SetModeAccSensor()
 
-N = 0
+
 while True:
+    print("--- %s seconds ---" % (time.time() - StartTime))
     Acc, Gyro = GetValueFromAccGyroSensor()
     pitch += Gyro[0]*dt
     roll -= Gyro[1]*dt
@@ -158,8 +164,11 @@ while True:
     time.sleep(dt)
     N += 1
     if N == 100:
+        print("--- %s seconds ---" % (time.time() - start_time))
+
         value = GetValueFromFlexSensor()
         angle = ValueToAngle(value)
+        # Store Data
         LogData(angle, LogFlex)
         LogData(pitch, LogPitch)
         LogData(roll, LogRoll)
