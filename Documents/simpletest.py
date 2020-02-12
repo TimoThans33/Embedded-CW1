@@ -49,7 +49,6 @@ ValuePerAngle = (ValueStraight-ValueBend)/90
 
 MagMcro = 0.000001
 AccMG2G = 0.000244
-AccMG4G = 0.000488
 Gravity = 9.82
 pitch = 0.0
 roll = 0.0
@@ -99,9 +98,12 @@ def SetModeAccSensor():
     if  int.from_bytes(ReadI2C(AccAddr, WhoAmI, 1), "big") != AccID:
         print("Failed to find Accelerometer")
         exit()
+    # Enable changes in control register
     bus.write_byte_data(AccAddr, CtrlReg1, 0x00)
+    # 2g Full-scale range
     bus.write_byte_data(AccAddr, XYZData, 0x00)
-    bus.write_byte_data(AccAddr, CtrlReg2, 0x02)
+    #
+    bus.write_byte_data(AccAddr, CtrlReg2, 0x01)
     bus.write_byte_data(AccAddr, CtrlReg1, 0x15) # 10101
     bus.write_byte_data(AccAddr, MCtrlReg1, 0x1F)    # 00011111
 
