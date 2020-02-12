@@ -54,7 +54,6 @@ Gravity = 9.82
 pitch = 0.0
 roll = 0.0
 dt = 0.01
-N = 0
 
 def LogData(value, log):
     # Append the value in a list storing the last 60 values
@@ -146,11 +145,8 @@ def TwosComp(val, bits):
         return val - (1 << bits)
     return val
 
-SetModeAccSensor()
-
-
-while True:
-    Acc, Gyro = GetValueFromAccGyroSensor()
+def CalcAngle(Acc, Gyro):
+    # Calculate angles
     pitch += Gyro[0]*dt
     roll -= Gyro[1]*dt
 
@@ -159,10 +155,20 @@ while True:
 
     rollAcc = math.atan2(Acc[0], Acc[2])*180/math.pi
     roll = roll*0.98 + rollAcc*0.02
+    return = pitch, roll
+
+
+SetModeAccSensor()
+
+
+while True:
+    Acc, Gyro = GetValueFromAccGyroSensor()
+    pitch, roll = CalcAngle(Acc, Gyro)
 
     time.sleep(dt)
+
     if (time.time() - Timer) >= 1:
-        print("--- %s seconds ---" % (time.time() - Timer))
+        # Every Ssecond
 
         value = GetValueFromFlexSensor()
         angle = ValueToAngle(value)
