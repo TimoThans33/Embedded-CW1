@@ -8,7 +8,7 @@ from collections import deque
 # Create an instance
 bus = smbus.SMBus(1)
 
-StartTime = time.time()
+Timer = time.time()
 
 # Register and config values of ADS1115
 FlexAddr = 0x48
@@ -150,7 +150,6 @@ SetModeAccSensor()
 
 
 while True:
-    #print("--- %s seconds ---" % (time.time() - StartTime))
     Acc, Gyro = GetValueFromAccGyroSensor()
     pitch += Gyro[0]*dt
     roll -= Gyro[1]*dt
@@ -162,9 +161,8 @@ while True:
     roll = roll*0.98 + rollAcc*0.02
 
     time.sleep(dt)
-    N += 1
-    if N == 100:
-        print("--- %s seconds ---" % (time.time() - StartTime))
+    if (time.time() - Timer) >= 1:
+        print("--- %s seconds ---" % (time.time() - Timer))
 
         value = GetValueFromFlexSensor()
         angle = ValueToAngle(value)
@@ -173,4 +171,4 @@ while True:
         LogData(pitch, LogPitch)
         LogData(roll, LogRoll)
         print(angle, pitch, roll)
-        N = 0
+        Timer = time.time()
