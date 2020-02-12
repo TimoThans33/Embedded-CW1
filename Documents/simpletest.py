@@ -150,7 +150,7 @@ SetModeAccSensor()
 
 
 while True:
-    print("--- %s seconds ---" % (time.time() - StartTime))
+    #print("--- %s seconds ---" % (time.time() - StartTime))
     Acc, Gyro = GetValueFromAccGyroSensor()
     pitch += Gyro[0]*dt
     roll -= Gyro[1]*dt
@@ -164,7 +164,7 @@ while True:
     time.sleep(dt)
     N += 1
     if N == 100:
-        print("--- %s seconds ---" % (time.time() - start_time))
+        print("--- %s seconds ---" % (time.time() - StartTime))
 
         value = GetValueFromFlexSensor()
         angle = ValueToAngle(value)
