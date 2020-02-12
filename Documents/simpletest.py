@@ -145,8 +145,13 @@ def TwosComp(val, bits):
         return val - (1 << bits)
     return val
 
-def CalcAngle(Acc, Gyro):
-    # Calculate angles
+    
+
+SetModeAccSensor()
+
+
+while True:
+    Acc, Gyro = GetValueFromAccGyroSensor()
     pitch += Gyro[0]*dt
     roll -= Gyro[1]*dt
 
@@ -155,15 +160,6 @@ def CalcAngle(Acc, Gyro):
 
     rollAcc = math.atan2(Acc[0], Acc[2])*180/math.pi
     roll = roll*0.98 + rollAcc*0.02
-    return  pitch, roll
-
-
-SetModeAccSensor()
-
-
-while True:
-    Acc, Gyro = GetValueFromAccGyroSensor()
-    pitch, roll = CalcAngle(Acc, Gyro)
 
     time.sleep(dt)
 
