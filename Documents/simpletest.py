@@ -103,7 +103,7 @@ def SetModeAccSensor():
     # 2g Full-scale range
     bus.write_byte_data(AccAddr, XYZData, 0x00)
     #
-    bus.write_byte_data(AccAddr, CtrlReg2, 0x01)
+    bus.write_byte_data(AccAddr, CtrlReg2, 0x02)
     bus.write_byte_data(AccAddr, CtrlReg1, 0x15) # 10101
     bus.write_byte_data(AccAddr, MCtrlReg1, 0x1F)    # 00011111
 
