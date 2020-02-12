@@ -22,6 +22,7 @@ good_sit_per = np.array([0])
 bad_lay_per = np.array([0])
 good_lay_per = np.array([0])
 k = 0
+time_period = 2
 
 
 def valuePercent(val1, val2):
@@ -48,7 +49,7 @@ for i in range(len(x)):
             good_lay += 1
         else:
             bad_lay += 1
-    if time.time() - timer >= 2:
+    if time.time() - timer >= time_period:
         sit_per1, sit_per2 = valuePercent(good_sit, bad_sit)
         lay_per1, lay_per2 = valuePercent(good_lay, bad_lay)
         if k == 0:
@@ -56,13 +57,13 @@ for i in range(len(x)):
             bad_sit_per = sit_per2
             good_lay_per = lay_per1
             bad_lay_per = lay_per2
-            xax = 30
+            xax = time_period
         else:
             bad_sit_per = np.append(bad_sit_per, sit_per2)
             good_sit_per = np.append(good_sit_per, sit_per1)
             bad_lay_per = np.append(bad_lay_per, lay_per2)
             good_lay_per = np.append(good_lay_per, lay_per1)
-            xax = np.append(xax, 30*(k+1))
+            xax = np.append(xax, time_period*(k+1))
         timer = time.time()
 
         bad_sit = 0
@@ -98,8 +99,8 @@ plt.show()
 
 
 
-tick = np.arange(x[0],x[-1],step=30)
-label = np.arange(1,len(tick)+1)*30
+tick = np.arange(x[0],x[-1],step=time_period)
+label = np.arange(1,len(tick)+1)*time_period
 label = np.flip(label)
 
 plt.figure(1)
