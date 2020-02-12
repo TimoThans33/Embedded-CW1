@@ -12,7 +12,7 @@ timer = time.time()
 """
 Lets say an hour is 10 datapoints: how many data points are higher
 """
-xax = np.array(["30 s"])
+xax = np.array([])
 bad_sit = 0
 good_sit = 0
 bad_lay = 0
@@ -56,22 +56,24 @@ for i in range(len(x)):
             bad_sit_per = sit_per2
             good_lay_per = lay_per1
             bad_lay_per = lay_per2
+            xax = 30
         else:
             bad_sit_per = np.append(bad_sit_per, sit_per2)
             good_sit_per = np.append(good_sit_per, sit_per1)
             bad_lay_per = np.append(bad_lay_per, lay_per2)
             good_lay_per = np.append(good_lay_per, lay_per1)
+            xax = np.append(xax, 30*(k+1))
         timer = time.time()
-        xax = np.append(xax,'30 s')
+
         bad_sit = 0
         good_sit = 0
         bad_lay = 0
         good_lay = 0
         k += 1
-        print(bad_sit_per, good_sit_per,bad_lay_per,good_lay_per)
     time.sleep(0.1)
 
 
+xax = np.flip(xax)
 index = np.arange(len(bad_sit_per))
 bar_width = 0.2
 opacity = 0.6
@@ -83,7 +85,7 @@ plt.bar(index + bar_width, bad_sit_per, bar_width,
 plt.bar(index + 2*bar_width, good_lay_per, bar_width,
         alpha = opacity, label = 'Good: laying position' )
 plt.bar(index + 3*bar_width, bad_lay_per, bar_width, alpha = 0.6, label = 'Bad: laying position' )
-plt.xlabel('Time')
+plt.xlabel('Time from now [s]')
 plt.ylabel('Percent')
 plt.ylim(0,100)
 plt.title('Time spent in position')
@@ -96,14 +98,18 @@ plt.show()
 
 
 
+tick = np.arange(x[0],x[-1],step=30)
+label = np.arange(1,len(tick)+1)*30
+label = np.flip(label)
 
-plt.figure(0)
+plt.figure(1)
 plt.plot(x, angle_back, label='back')
 plt.plot(x, angle_neck, label='neck')
 plt.legend()
-plt.ylabel('Angle')
-plt.xlabel('Time')
-
+plt.xticks(tick, label)
+plt.ylabel('Angle [degree]')
+plt.xlabel('Time from now [s]')
+plt.show()
 """
 Time spent in bad posture?
 """
