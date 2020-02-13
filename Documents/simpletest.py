@@ -20,6 +20,7 @@ def on_log(client, obj, level, string):
 
 mqttc = mqtt.Client()
 mqttc.on_publish = on_publish
+mqttc.on_subscribe = on_subscribe
 mqttc.on_log = on_log
 
 # Parse CLOUDMQTT_URL (or fallback to localhost)
@@ -28,9 +29,8 @@ url = urlparse(url_str)
 topic = 'neck'
 
 # Connect
-mqttc.username_pw_set(url.username, url.password)
-mqttc.connect(url.hostname, url.port)
-
+mqttc.connect("timotest", "tvbxqfql", "bTziEuFTZ5Zb")
+mqttc.subscribe(topic, 0)
 mqttc.publish(topic, 2)
 
 rc = 0
