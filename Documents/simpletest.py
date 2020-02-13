@@ -1,12 +1,36 @@
 
 import time
+import os
 import math
 import smbus
 import struct
+import paho.mqtt.client as mqtt
 from collections import deque
 
 # Create an instance
 bus = smbus.SMBus(1)
+
+# MQTT
+def on_publish(client, obj, mid):
+    print("mid: " + str(mid))
+
+def on_log(client, obj, level, string):
+    print(string)
+
+mqttc = mqtt.Client()
+mqttc.on_publish = on_publish
+mqttc.on_log = on_log
+
+# Parse CLOUDMQTT_URL (or fallback to localhost)
+url_str = os.environ.get('CLOUDMQTT_URL', 'tcp://hairdresser.cloudmqtt.com:16031')
+url = urlparse.urlparse(url_str)
+
+
+# Connect
+mqttc.username_pw_set(url.username, url.password)
+mqttc.connect(url.hostname, url.port)
+
+mqttc.publish('msg', 'it works!')
 
 Timer = time.time()
 
@@ -145,12 +169,12 @@ def TwosComp(val, bits):
         return val - (1 << bits)
     return val
 
-    
+
 
 SetModeAccSensor()
 
 
-while True:
+while False:
     Acc, Gyro = GetValueFromAccGyroSensor()
     pitch += Gyro[0]*dt
     roll -= Gyro[1]*dt
@@ -174,3 +198,7 @@ while True:
         LogData(roll, LogRoll)
         print(angle, pitch, roll)
         Timer = time.time()
+        mqttc.publish('neck', angle)
+        mqttc.publish('back', roll)
+        mqttc.publish('time', time.time())
+        mqttc.publish('msg', 'it works!')
