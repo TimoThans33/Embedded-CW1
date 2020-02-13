@@ -24,7 +24,7 @@ mqttc.on_log = on_log
 
 # Parse CLOUDMQTT_URL (or fallback to localhost)
 url_str = os.environ.get('CLOUDMQTT_URL', 'tcp://hairdresser.cloudmqtt.com:16031')
-url = urlparse.urlparse(url_str)
+url = urlparse(url_str)
 
 
 # Connect
