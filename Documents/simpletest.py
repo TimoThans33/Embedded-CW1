@@ -31,7 +31,7 @@ url = urlparse(url_str)
 mqttc.username_pw_set(url.username, url.password)
 mqttc.connect(url.hostname, url.port)
 
-mqttc.publish('msg', 'it works!')
+mqttc.publish('neck', 2)
 
 Timer = time.time()
 
