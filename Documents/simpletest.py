@@ -12,34 +12,25 @@ from urllib.parse import urlparse
 bus = smbus.SMBus(1)
 
 # MQTT
-def on_publish(client, obj, mid):
-    print("mid: " + str(mid))
 
-def on_subscribe(client, obj, mid, granted_qos):
-    print("Subscribed: " + str(mid) + " " + str(granted_qos))
+def on_connect(client, userdata, flags, rc):
+    print(“CONNACK received with code %d.” % (rc))
 
-def on_log(client, obj, level, string):
-    print(string)
+def on_publish(client, userdata, mid):
+    print("mid: "+str(mid))
 
-mqttc = mqtt.Client()
-mqttc.on_publish = on_publish
-mqttc.on_subscribe = on_subscribe
-mqttc.on_log = on_log
+client = paho.Client()
+client.on_connect = on_connect
+client.username_pw_set("tvbxqfql", "bTziEuFTZSZb")
+client.connect("broker.mqttdashboard.com")
+client.loop_start()
 
-# Parse CLOUDMQTT_URL (or fallback to localhost)
-url_str = os.environ.get('CLOUDMQTT_URL', 'tcp://hairdresser.cloudmqtt.com:16031')
-url = urlparse(url_str)
-topic = 'neck'
-
-# Connect
-mqttc.username_pw_set(url.username, url.password)
-mqttc.connect(url.hostname, 16031)
 mqttc.publish(topic, 2)
 mqttc.subscribe(topic, 0)
 
 
 rc = 0
-while True:
+while rc == 0:
     rc = mqttc.loop()
 print("rc: " + str(rc))
 
@@ -209,7 +200,6 @@ while False:
         LogData(roll, LogRoll)
         print(angle, pitch, roll)
         Timer = time.time()
-        mqttc.publish('neck', angle)
-        mqttc.publish('back', roll)
-        mqttc.publish('time', time.time())
-        mqttc.publish('msg', 'it works!')
+        client.publish('neck', angle)
+        client.publish('back', roll)
+        #client.publish('time', time.time())
