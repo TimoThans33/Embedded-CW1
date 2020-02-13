@@ -33,8 +33,9 @@ topic = 'neck'
 
 # Connect
 mqttc.connect("timotest", "tvbxqfql", "bTziEuFTZ5Zb")
-mqttc.subscribe(topic, 0)
 mqttc.publish(topic, 2)
+mqttc.subscribe(topic, 0)
+
 
 rc = 0
 while rc == 0:
