@@ -28,11 +28,6 @@ client.loop_start()
 
 
 
-rc = 0
-while rc == 0:
-    rc = mqttc.loop()
-print("rc: " + str(rc))
-
 Timer = time.time()
 
 # Register and config values of ADS1115
@@ -175,7 +170,7 @@ def TwosComp(val, bits):
 SetModeAccSensor()
 
 
-while False:
+while True:
     Acc, Gyro = GetValueFromAccGyroSensor()
     pitch += Gyro[0]*dt
     roll -= Gyro[1]*dt
