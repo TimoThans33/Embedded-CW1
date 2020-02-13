@@ -25,13 +25,18 @@ mqttc.on_log = on_log
 # Parse CLOUDMQTT_URL (or fallback to localhost)
 url_str = os.environ.get('CLOUDMQTT_URL', 'tcp://hairdresser.cloudmqtt.com:16031')
 url = urlparse(url_str)
-
+topic = 'neck'
 
 # Connect
 mqttc.username_pw_set(url.username, url.password)
 mqttc.connect(url.hostname, url.port)
 
-mqttc.publish('neck', 2)
+mqttc.publish(topic, 2)
+
+rc = 0
+while rc == 0:
+    rc = mqttc.loop()
+print("rc: " + str(rc))
 
 Timer = time.time()
 
