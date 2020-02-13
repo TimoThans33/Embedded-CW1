@@ -6,6 +6,7 @@ import smbus
 import struct
 import paho.mqtt.client as mqtt
 from collections import deque
+urllib.parse import urlparse
 
 # Create an instance
 bus = smbus.SMBus(1)
