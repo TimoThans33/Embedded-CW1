@@ -32,7 +32,8 @@ url = urlparse(url_str)
 topic = 'neck'
 
 # Connect
-mqttc.connect("timotest", "tvbxqfql", "bTziEuFTZ5Zb")
+mqttc.username_pw_set(url.username, url.password)
+mqttc.connect(url.hostname, url.port)
 mqttc.publish(topic, 2)
 mqttc.subscribe(topic, 0)
 
