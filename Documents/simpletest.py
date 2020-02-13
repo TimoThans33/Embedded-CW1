@@ -15,6 +15,9 @@ bus = smbus.SMBus(1)
 def on_publish(client, obj, mid):
     print("mid: " + str(mid))
 
+def on_subscribe(client, obj, mid, granted_qos):
+    print("Subscribed: " + str(mid) + " " + str(granted_qos))
+
 def on_log(client, obj, level, string):
     print(string)
 
