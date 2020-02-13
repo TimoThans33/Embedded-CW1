@@ -33,7 +33,7 @@ topic = 'neck'
 
 # Connect
 mqttc.username_pw_set(url.username, url.password)
-mqttc.connect(url.hostname, url.port)
+mqttc.connect(hairdresser.cloudmqtt.com, 16031)
 mqttc.publish(topic, 2)
 mqttc.subscribe(topic, 0)
 
