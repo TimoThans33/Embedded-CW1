@@ -14,12 +14,12 @@ bus = smbus.SMBus(1)
 # MQTT
 
 def on_connect(client, userdata, flags, rc):
-    print("CONNACK received with code %d."" % (rc))
+    print("CONNACK received with code %d." % (rc))
 
 def on_publish(client, userdata, mid):
     print("mid: "+str(mid))
 
-client = paho.Client()
+client = mqtt.Client()
 client.on_connect = on_connect
 client.username_pw_set("tvbxqfql", "bTziEuFTZSZb")
 client.connect("broker.mqttdashboard.com")
