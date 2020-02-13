@@ -25,8 +25,7 @@ client.username_pw_set("tvbxqfql", "bTziEuFTZSZb")
 client.connect("broker.mqttdashboard.com")
 client.loop_start()
 
-mqttc.publish(topic, 2)
-mqttc.subscribe(topic, 0)
+
 
 
 rc = 0
